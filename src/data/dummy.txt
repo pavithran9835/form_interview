@@ -1,0 +1,68 @@
+import logo from "./logo.svg";
+import "./App.css";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import quizData from "./data/data.json";
+import { useState } from "react";
+
+function App() {
+  const [questionid, setQuestionid] = useState(0);
+  const [quiz, setQuiz] = useState(quizData);
+  const [selectedQuiz, setSelectedQuiz] = useState(quizData[0]);
+
+  const backHandler = () => {
+    if (questionid > 0) {
+      setQuestionid(questionid - 1);
+      setSelectedQuiz(quiz[questionid - 1]);
+    }
+  };
+
+  const nextHandler = () => {
+    if (questionid >= 0) {
+      setQuestionid(questionid + 1);
+      setSelectedQuiz(quiz[questionid + 1]);
+    }
+  };
+
+  const radioButtonHandler = (e, index) => {};
+
+  return (
+    <div className="App">
+      <div className="quiz_main_container">
+        <div className="quiz_back_conatiner">
+          <IoMdArrowRoundBack className="backButton" onClick={backHandler} />
+        </div>
+        <div className="quiz_content_conatiner">
+          <div className="quiz_title_container">
+            <p>{selectedQuiz.question}</p>
+          </div>
+
+          <div className="questions_conatiner">
+            {quiz[questionid].questiontype === "Radio"
+              ? selectedQuiz.questionoption.map((options, index) => (
+                  <div className="form_group">
+                    <input
+                      type="radio"
+                      id={options.optionvalue}
+                      name="Radio"
+                      checked={options.selected}
+                      onClick={(e) => {
+                        radioButtonHandler(e, index);
+                      }}
+                    />
+                    <label for="html">{options.optionvalue}</label>
+                  </div>
+                ))
+              : null}
+          </div>
+        </div>
+        <div className="quiz_next_conatiner">
+          <button className="nextButton" onClick={nextHandler}>
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default App;
